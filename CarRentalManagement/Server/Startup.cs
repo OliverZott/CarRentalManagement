@@ -30,6 +30,8 @@ namespace CarRentalManagement.Server
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
 
+            services.Add(new ServiceDescriptor(typeof(MySqlApplicationContext), new MySqlApplicationContext(Configuration.GetConnectionString("DefaultConnection"))));
+
             services.AddDatabaseDeveloperPageExceptionFilter();
 
             services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = false)
