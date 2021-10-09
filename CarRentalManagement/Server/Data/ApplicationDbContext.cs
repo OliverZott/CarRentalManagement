@@ -31,6 +31,8 @@ namespace CarRentalManagement.Server.Data
             builder.ApplyConfiguration(new MakeSeedingConfiguration());
             builder.ApplyConfiguration(new ModelSeedingConfiguration());
             builder.ApplyConfiguration(new RoleSeedingConfiguration());
+            builder.ApplyConfiguration(new UserSeedingConfiguration());
+            builder.ApplyConfiguration(new UserRoleSeedingConfiguration());
         }
     }
 
