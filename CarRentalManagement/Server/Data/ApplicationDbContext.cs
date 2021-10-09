@@ -1,4 +1,5 @@
-﻿using CarRentalManagement.Server.Models;
+﻿using CarRentalManagement.Server.Configurations.EntitySeeding;
+using CarRentalManagement.Server.Models;
 using CarRentalManagement.Shared.Domain;
 using IdentityServer4.EntityFramework.Options;
 using Microsoft.AspNetCore.ApiAuthorization.IdentityServer;
@@ -21,5 +22,17 @@ namespace CarRentalManagement.Server.Data
         public DbSet<Model> Models { get; set; }
         public DbSet<Color> Colors { get; set; }
         public DbSet<Make> Makes { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            base.OnModelCreating(builder);
+
+            builder.ApplyConfiguration(new ColorSeedingConfiguration());
+            builder.ApplyConfiguration(new MakeSeedingConfiguration());
+            builder.ApplyConfiguration(new ModelSeedingConfiguration());
+            builder.ApplyConfiguration(new RoleSeedingConfiguration());
+        }
     }
+
+
 }
