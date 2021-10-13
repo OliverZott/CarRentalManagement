@@ -1,5 +1,4 @@
 ﻿using CarRentalManagement.Server.Data;
-using CarRentalManagement.Server.Data.Migrations;
 using CarRentalManagement.Shared.Domain;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
@@ -14,6 +13,10 @@ namespace CarRentalManagement.Server.Repository
         private readonly ApplicationDbContext _context;
         private IGenericRepository<Make> _make;
         private IGenericRepository<Color> _color;
+        private IGenericRepository<Model> _model;
+        private IGenericRepository<Vehicle> _vehicle;
+        private IGenericRepository<Customer> _customer;
+        private IGenericRepository<Booking> _booking;
 
         public UnitOfWork(ApplicationDbContext context)
         {
@@ -22,6 +25,10 @@ namespace CarRentalManagement.Server.Repository
 
         public IGenericRepository<Make> Make => _make ?? new GenericRepository<Make>(_context);
         public IGenericRepository<Color> Color => _color ?? new GenericRepository<Color>(_context);
+        public IGenericRepository<Model> Model => _model ?? new GenericRepository<Model>(_context);
+        public IGenericRepository<Vehicle> Vehicle => _vehicle ?? new GenericRepository<Vehicle>(_context);
+        public IGenericRepository<Customer> Customer => _customer ?? new GenericRepository<Customer>(_context);
+        public IGenericRepository<Booking> Booking => _booking ?? new GenericRepository<Booking>(_context);
 
         public void Dispose()
         {
