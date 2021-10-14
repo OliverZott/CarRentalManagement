@@ -1,0 +1,63 @@
+﻿@page "/makes"
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize]
+@inject HttpClient Http
+@inject JSRuntime js
+
+
+<h3 class="card-title">Car Makes</h3>
+<hr />
+<br />
+
+@if (Makes == null)
+{
+    <div class="alert alert-info">Loading Makes ... </div>
+}
+else
+{
+    <table class="table table-responsive">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var make in Makes)
+            {
+                <tr>
+                    <td>@make.Name</td>
+                    <td>
+                        <a class="btn btn-primary" href="/makes/view/@make.Id"></a>
+                        <a class="btn btn-warning" href="/makes/edit/@make.Id"></a>
+                        <a>
+                            <button class="btn btn-danger" @onclick="@(() => Delete(make.Id))">
+                                <span class="oi oi-delete"></span>
+                            </button>
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+
+
+@code {
+    private List<Make> Makes;
+
+    protected override async Task OnInitializedAsync()
+    {
+        Makes = await Http.GetFromJsonAsync<List<Make>>("api/makes");
+    }
+
+    async void Delete(int makeId)
+    {
+        var make = Makes.First(q => q.Id == makeId);
+
+        if (!await js.InvokeAsync<bool>("confirm", $"Do you want to delete {make.Name}")) return;
+        await Http.DeleteAsync($"api/makes/{makeId}");
+        await OnInitializedAsync();
+    }
+}

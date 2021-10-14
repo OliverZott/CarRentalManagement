@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 
 namespace CarRentalManagement.Server.Controllers
 {
+    //[Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class MakesController : ControllerBase
