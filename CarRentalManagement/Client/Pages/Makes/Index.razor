@@ -1,8 +1,10 @@
-﻿@page "/makes"
+﻿@page "/makes/"
 @using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Components.WebAssembly.Authentication
+@using CarRentalManagement.Shared
 @attribute [Authorize]
-@inject HttpClient Http
-@inject JSRuntime js
+@inject HttpClient _httpClient
+@inject IJSRuntime _js
 
 
 <h3 class="card-title">Car Makes</h3>
@@ -28,13 +30,15 @@ else
                 <tr>
                     <td>@make.Name</td>
                     <td>
-                        <a class="btn btn-primary" href="/makes/view/@make.Id"></a>
-                        <a class="btn btn-warning" href="/makes/edit/@make.Id"></a>
-                        <a>
-                            <button class="btn btn-danger" @onclick="@(() => Delete(make.Id))">
-                                <span class="oi oi-delete"></span>
-                            </button>
+                        <a href="/makes/view/@make.Id" class="btn btn-primary">
+                            <span class="oi oi-book"></span>
                         </a>
+                        <a href="/makes/edit/@make.Id" class="btn btn-warning">
+                            <span class="oi oi-pencil"></span>
+                        </a>
+                        <button class="btn btn-danger" @onclick="@(() => Delete(make.Id))">
+                            <span class="oi oi-delete"></span>
+                        </button>
                     </td>
                 </tr>
             }
@@ -49,15 +53,15 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        Makes = await Http.GetFromJsonAsync<List<Make>>("api/makes");
+        Makes = await _httpClient.GetFromJsonAsync<List<Make>>("api/makes");
     }
 
     async void Delete(int makeId)
     {
         var make = Makes.First(q => q.Id == makeId);
 
-        if (!await js.InvokeAsync<bool>("confirm", $"Do you want to delete {make.Name}")) return;
-        await Http.DeleteAsync($"api/makes/{makeId}");
+        if (!await _js.InvokeAsync<bool>("confirm", $"Do you want to delete {make.Name}")) return;
+        await _httpClient.DeleteAsync($"api/makes/{makeId}");
         await OnInitializedAsync();
     }
 }
