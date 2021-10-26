@@ -1,0 +1,75 @@
+﻿@page "/bookings/"
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Components.WebAssembly.Authentication
+@using CarRentalManagement.Shared
+@using CarRentalManagement.Client.Static
+@using System.Globalization
+@attribute [Authorize]
+@inject HttpClient _httpClient
+@inject IJSRuntime _js
+
+
+<h3 class="card-title">Car Makes</h3>
+<hr />
+<br />
+
+@if (_bookings == null)
+{
+    <div class="alert alert-info">Loading Makes ... </div>
+}
+else
+{
+    <table class="table table-responsive">
+        <thead>
+            <tr>
+                <th>Customer Tax Id</th>
+                <th>Vehicle</th>
+                <th>Date</th>
+                <th>Duration</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        @foreach (var booking in _bookings)
+        {
+            <tr>
+                <td>@booking.Customer.TaxId</td>
+                <td>@booking.Vehicle</td>
+                <td>@booking.DateCreated.Date.ToString("dd MMMM yyyy")</td>
+                <td>@((booking.DateIn - booking.DateOut).TotalDays.ToString(CultureInfo.InvariantCulture))</td>
+                <td>
+                    <a href="/makes/view/@booking.Id" class="btn btn-primary">
+                        <span class="oi oi-book"></span>
+                    </a>
+                    <a href="/makes/edit/@booking.Id" class="btn btn-warning">
+                        <span class="oi oi-pencil"></span>
+                    </a>
+                    <button class="btn btn-danger" @onclick="@(() => Delete(booking.Id))">
+                        <span class="oi oi-delete"></span>
+                    </button>
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+}
+
+
+
+@code {
+    private List<Booking> _bookings;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _bookings = await _httpClient.GetFromJsonAsync<List<Booking>>(Endpoints.BookingsEndpoint);
+    }
+
+    async void Delete(int makeId)
+    {
+        var booking = _bookings.First(q => q.Id == makeId);
+
+        if (!await _js.InvokeAsync<bool>("confirm", $"Do you want to delete booking with Id: {booking.Id}")) return;
+        await _httpClient.DeleteAsync($"{Endpoints.BookingsEndpoint}/{makeId}");
+        await OnInitializedAsync();
+    }
+}

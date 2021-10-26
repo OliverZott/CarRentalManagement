@@ -1,0 +1,77 @@
+﻿@page "/vehicles/"
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Components.WebAssembly.Authentication
+@using CarRentalManagement.Shared
+@using CarRentalManagement.Client.Static
+@attribute [Authorize]
+@inject HttpClient _httpClient
+@inject IJSRuntime _js
+
+
+
+<h3 class="card-title">Vehicle List</h3>
+<hr />
+<br />
+
+@if (_vehicles == null)
+{
+    <div class="alert alert-info">Loading Makes ... </div>
+}
+else
+{
+    <table class="table table-responsive">
+        <thead>
+            <tr>
+                <th>Make</th>
+                <th>Model</th>
+                <th>Year</th>
+                <th>Daily Rate</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        @foreach (var vehicle in _vehicles)
+        {
+            <tr>
+                <td>@vehicle.Make.Name</td>
+                <td>@vehicle.Model.Name</td>
+                <td>@vehicle.Year</td>
+                <td>@vehicle.RentalRate</td>
+                <td>
+                    <a href="/vehicles/show/@vehicle.Id" class="btn btn-primary">
+                        <span class="oi-book"></span>
+                    </a>
+                    <a href="/vehicles/edit/@vehicle.Id" class="btn btn-warning">
+                        <span class="oi-pencil">Edit</span>
+                    </a>
+                    <button class="btn-danger" @onclick="@(() => Delete(vehicle.Id))">
+                        <span class="oi-delete"></span>
+                    </button>
+                </td>
+
+            </tr>
+        }
+        </tbody>
+    </table>
+}
+
+
+
+@code {
+    private List<Vehicle> _vehicles;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _vehicles = await _httpClient.GetFromJsonAsync<List<Vehicle>>(Endpoints.VehiclesEndpoint);
+    }
+
+    private async void Delete(int vehicleId)
+    {
+        var vehicle = _vehicles.First(v => v.Id == vehicleId);
+
+        if (!await _js.InvokeAsync<bool>("confirm", $"Do you want to delete vehicle with Id: {vehicle.Id}?")) return;
+        await _httpClient.DeleteAsync($"api/makes/{vehicleId}");
+        await OnInitializedAsync();
+    }
+
+}

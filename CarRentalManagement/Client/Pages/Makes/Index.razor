@@ -2,7 +2,8 @@
 @using Microsoft.AspNetCore.Authorization
 @using Microsoft.AspNetCore.Components.WebAssembly.Authentication
 @using CarRentalManagement.Shared
-@attribute [Authorize]
+@using CarRentalManagement.Client.Static
+@attribute [Authorize]      
 @inject HttpClient _httpClient
 @inject IJSRuntime _js
 
@@ -11,7 +12,7 @@
 <hr />
 <br />
 
-@if (Makes == null)
+@if (_makes == null)
 {
     <div class="alert alert-info">Loading Makes ... </div>
 }
@@ -25,7 +26,7 @@ else
             </tr>
         </thead>
         <tbody>
-            @foreach (var make in Makes)
+            @foreach (var make in _makes)
             {
                 <tr>
                     <td>@make.Name</td>
@@ -49,19 +50,23 @@ else
 
 
 @code {
-    private List<Make> Makes;
+    private List<Make> _makes;
 
     protected override async Task OnInitializedAsync()
     {
-        Makes = await _httpClient.GetFromJsonAsync<List<Make>>("api/makes");
+        _makes = await _httpClient.GetFromJsonAsync<List<Make>>(Endpoints.MakesEndpoint);
     }
 
     async void Delete(int makeId)
     {
-        var make = Makes.First(q => q.Id == makeId);
+        var make = _makes.First(q => q.Id == makeId);
 
-        if (!await _js.InvokeAsync<bool>("confirm", $"Do you want to delete {make.Name}")) return;
-        await _httpClient.DeleteAsync($"api/makes/{makeId}");
-        await OnInitializedAsync();
+        var confirm = await _js.InvokeAsync<bool>("confirm", $"Do you want to delete {make.Name}");
+        if (confirm)
+        {
+            await _httpClient.DeleteAsync($"{Endpoints.MakesEndpoint}/{makeId}");
+            await OnInitializedAsync();
+        }
+
     }
 }

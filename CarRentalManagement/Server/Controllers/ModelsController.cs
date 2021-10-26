@@ -8,16 +8,16 @@ namespace CarRentalManagement.Server.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ModelController : ControllerBase
+    public class ModelsController : ControllerBase
     {
         private readonly IUnitOfWork _unitOfWork;
 
-        public ModelController(IUnitOfWork unitOfWork)
+        public ModelsController(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
         }
 
-        // GET: api/<ModelController>
+        // GET: api/<ModelsController>
         [HttpGet]
         public async Task<ActionResult> GetAsync()
         {
@@ -25,7 +25,7 @@ namespace CarRentalManagement.Server.Controllers
             return Ok(model);
         }
 
-        // GET api/<ModelController>/5
+        // GET api/<ModelsController>/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Model>> Get(int id)
         {
@@ -39,7 +39,7 @@ namespace CarRentalManagement.Server.Controllers
             return model;
         }
 
-        // POST api/<ModelController>
+        // POST api/<ModelsController>
         [HttpPost]
         public async Task<ActionResult<Model>> Post(Model model)
         {
@@ -49,7 +49,7 @@ namespace CarRentalManagement.Server.Controllers
             return CreatedAtAction("Get", new { id = model.Id }, model);
         }
 
-        // PUT api/<ModelController>/5
+        // PUT api/<ModelsController>/5
         [HttpPut("{id}")]
         public async Task<IActionResult> Put(int id, Model model)
         {
@@ -79,7 +79,7 @@ namespace CarRentalManagement.Server.Controllers
             return NoContent();
         }
 
-        // DELETE api/<ModelController>/5
+        // DELETE api/<ModelsController>/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {

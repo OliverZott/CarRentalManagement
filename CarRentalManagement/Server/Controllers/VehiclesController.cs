@@ -2,54 +2,57 @@
 using CarRentalManagement.Shared.Domain;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace CarRentalManagement.Server.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class BookingController : ControllerBase
+    public class VehiclesController : ControllerBase
     {
         private readonly IUnitOfWork _unitOfWork;
 
-        public BookingController(IUnitOfWork unitOfWork)
+        public VehiclesController(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
         }
 
-        // GET: api/Customer
+        // GET: api/Vehicle
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            var customer = await _unitOfWork.Customer.GetAll();
-            return Ok(customer);
+            var includes = new List<string> { "Make", "Model", "Color" };
+            var vehicle = await _unitOfWork.Vehicle.GetAll(includes: includes);
+            return Ok(vehicle);
         }
 
-        // GET: api/Customer/5
+        // GET: api/Vehicle/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Customer>> Get(int id)
+        public async Task<ActionResult<Vehicle>> GetVehicle(int id)
         {
-            var customer = await _unitOfWork.Customer.Get(x => x.Id == id);
+            var includes = new List<string> { "Make", "Model", "Color", "RentalRecords" };
+            var vehicle = await _unitOfWork.Vehicle.Get(x => x.Id == id, includes);
 
-            if (customer == null)
+            if (vehicle == null)
             {
                 return NotFound();
             }
 
-            return customer;
+            return vehicle;
         }
 
-        // PUT: api/Customer/5
+        // PUT: api/Vehicle/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutCustomer(int id, Customer customer)
+        public async Task<IActionResult> PutVehicle(int id, Vehicle vehicle)
         {
-            if (id != customer.Id)
+            if (id != vehicle.Id)
             {
                 return BadRequest();
             }
 
-            _unitOfWork.Customer.Update(customer);
+            _unitOfWork.Vehicle.Update(vehicle);
 
             try
             {
@@ -57,7 +60,7 @@ namespace CarRentalManagement.Server.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!await CustomerExists(id))
+                if (!await VehicleExists(id))
                 {
                     return NotFound();
                 }
@@ -70,37 +73,37 @@ namespace CarRentalManagement.Server.Controllers
             return NoContent();
         }
 
-        // POST: api/Customer
+        // POST: api/Vehicle
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Customer>> PostCustomer(Customer customer)
+        public async Task<ActionResult<Vehicle>> PostVehicle(Vehicle vehicle)
         {
-            await _unitOfWork.Customer.Insert(customer);
+            await _unitOfWork.Vehicle.Insert(vehicle);
             await _unitOfWork.Save(this.HttpContext);
 
-            return CreatedAtAction("Get", new { id = customer.Id }, customer);
+            return CreatedAtAction("GetVehicle", new { id = vehicle.Id }, vehicle);
         }
 
-        // DELETE: api/Customer/5
+        // DELETE: api/Vehicle/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteCustomer(int id)
+        public async Task<IActionResult> DeleteVehicle(int id)
         {
-            if (!await CustomerExists(id))
+            if (!await VehicleExists(id))
             {
                 return NotFound();
             }
 
-            await _unitOfWork.Customer.Delete(id);
+            await _unitOfWork.Vehicle.Delete(id);
             await _unitOfWork.Save(this.HttpContext);
 
             return NoContent();
         }
 
-        private async Task<bool> CustomerExists(int id)
+        private async Task<bool> VehicleExists(int id)
         {
-            var customer = await _unitOfWork.Customer.Get(x => x.Id == id);
+            var vehicle = await _unitOfWork.Vehicle.Get(x => x.Id == id);
 
-            return customer != null;
+            return vehicle != null;
         }
     }
 }

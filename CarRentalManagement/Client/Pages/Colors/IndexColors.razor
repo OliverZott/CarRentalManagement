@@ -1,0 +1,63 @@
+﻿@page "/colors/"
+@inject HttpClient _httpClient
+@inject IJSRuntime _js
+
+
+<h3 class="card-title">Color List</h3>
+<hr />
+<br />
+
+@if (_colors == null)
+{
+    <div class="alert-info">Loading Colors...</div>
+}
+else
+{
+    <table class="table table-responsive">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var color in _colors)
+            {
+                <tr>
+                    <td>@color.Name</td>
+                    <td>
+                        <a href="/vehicles/show/@color.Id" class="btn btn-primary">
+                            <span class="oi oi-book"></span>
+                        </a>
+                        <a href="/vehicles/edit/@color.Id" class="btn btn-warning">
+                            <span class="oi oi-pencil"></span>
+                        </a>
+                        <button class="btn btn-danger" @onclick="@(() => Delete(color.Id))">
+                            <span class="oi oi-delete"></span>
+                        </button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+
+@code {
+    private List<Color> _colors;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _colors = await _httpClient.GetFromJsonAsync<List<Color>>(Endpoints.ColorsEndpoint);
+    }
+
+    private async void  Delete(int colorId)
+    {
+        var color = _colors.Find(x => x.Id == colorId);
+
+        if (!await _js.InvokeAsync<bool>("WTF", $"Do you want to delete {color.Name}")) ;
+        await _httpClient.DeleteAsync($"{Endpoints.ColorsEndpoint}/{color.Id}" );
+        await OnInitializedAsync();
+    }
+
+}
