@@ -1,0 +1,130 @@
+﻿@page "/vehicles/create/"
+@using System.Windows.Markup
+
+@inject HttpClient _httpClient
+@inject NavigationManager _navigationManager
+
+
+<h3 class="card-title">Create New Vehicle</h3>
+<hr/>
+<br/>
+
+<EditForm Model="@vehicle" OnValidSubmit="CreateNewVehicle">
+    <DataAnnotationsValidator></DataAnnotationsValidator>
+    <ValidationSummary></ValidationSummary>
+
+
+    <div class="form-group">
+        <label>Make: </label>
+        <div>
+            <select @bind="vehicle.MakeId" class="form-control">
+                <option value="">-- Select Make --</option>
+                @if (_makes != null)
+                {
+                    foreach (var make in _makes)
+                    {
+                        <option value="@make.Id">@make.Name</option>
+                    }
+                }
+            </select>
+            <ValidationMessage For="@(() => vehicle.MakeId)"></ValidationMessage>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label>Model: </label>
+        <div>
+            @*same as select, but blazor-component*@
+            <InputSelect @bind-Value="vehicle.ModelId" class="form-control">
+                <option value="">-- Select Model --</option>
+                @if (_models != null)
+                {
+                    foreach (var model in _models)
+                    {
+                        <option value="@model.Id">@model.Name</option>
+                    }
+                }
+            </InputSelect>
+            <ValidationMessage For="@(() => vehicle.ModelId)"></ValidationMessage>
+
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label>Color: </label>
+        <div>
+            <select @bind="vehicle.ColorId" class="form-control">
+                <option value="">-- Select Color --</option>
+                @if (_colors != null)
+                {
+                    foreach (var color in _colors)
+                    {
+                        <option value="@color.Id">@color.Name</option>
+                    }
+                }
+            </select>
+            <ValidationMessage For="@(() => vehicle.ColorId)"></ValidationMessage>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label>Year: </label>
+        <div>
+            <InputNumber @bind-Value="@vehicle.Year" class="form-control"></InputNumber>
+            <ValidationMessage For="@(() => vehicle.Year)"></ValidationMessage>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label>License Plate Number: </label>
+        <div>
+            <InputText @bind-Value="@vehicle.LicensePlateNumber" class="form-control"></InputText>
+            <ValidationMessage For="@(() => vehicle.LicensePlateNumber)"></ValidationMessage>
+        </div>
+    </div>
+    
+    <div class="form-group">
+        <label>Vehicle Identification Number: </label>
+        <div>
+            <InputText @bind-Value="@vehicle.Vin" class="form-control"></InputText>
+            <ValidationMessage For="@(() => vehicle.Vin)"></ValidationMessage>
+        </div>
+    </div>
+    
+    <div class="form-group">
+        <label>Daily Rate: </label>
+        <div>
+            <InputNumber @bind-Value="@vehicle.RentalRate" class="form-control"></InputNumber>
+            <ValidationMessage For="@(() => vehicle.RentalRate)"></ValidationMessage>
+        </div>
+    </div>
+    
+    <button type="submit" class="btn btn-success btn-block">Create Vehicle</button>
+
+</EditForm>
+
+
+
+@code {
+
+    private List<Make> _makes;
+    private List<Model> _models;
+    private List<Color> _colors;
+
+    Vehicle vehicle = new Vehicle();
+
+    protected override async Task OnInitializedAsync()
+    {
+        _makes = await _httpClient.GetFromJsonAsync<List<Make>>($"{Endpoints.MakesEndpoint}");
+        _models = await _httpClient.GetFromJsonAsync<List<Model>>($"{Endpoints.ModelsEndpoint}");
+        _colors = await _httpClient.GetFromJsonAsync<List<Color>>($"{Endpoints.ColorsEndpoint}");
+    }
+
+    //Values for object come from the "bind"
+    private async Task CreateNewVehicle()
+    {
+        await _httpClient.PostAsJsonAsync(Endpoints.VehiclesEndpoint, vehicle);
+        _navigationManager.NavigateTo("/vehicles/");
+    }
+
+}

@@ -13,13 +13,21 @@
 <hr />
 <br />
 
+<a href="/vehicles/create" class="btn btn-secondary">
+    <div class="oi oi-plus"></div>
+    Create New Vehicle
+</a>
+<br />
+<br />
+
+
 @if (_vehicles == null)
 {
     <div class="alert alert-info">Loading Makes ... </div>
 }
 else
 {
-    <table class="table table-responsive">
+    <table class="table">
         <thead>
             <tr>
                 <th>Make</th>
@@ -30,27 +38,27 @@ else
             </tr>
         </thead>
         <tbody>
-        @foreach (var vehicle in _vehicles)
-        {
-            <tr>
-                <td>@vehicle.Make.Name</td>
-                <td>@vehicle.Model.Name</td>
-                <td>@vehicle.Year</td>
-                <td>@vehicle.RentalRate</td>
-                <td>
-                    <a href="/vehicles/show/@vehicle.Id" class="btn btn-primary">
-                        <span class="oi-book"></span>
-                    </a>
-                    <a href="/vehicles/edit/@vehicle.Id" class="btn btn-warning">
-                        <span class="oi-pencil">Edit</span>
-                    </a>
-                    <button class="btn-danger" @onclick="@(() => Delete(vehicle.Id))">
-                        <span class="oi-delete"></span>
-                    </button>
-                </td>
+            @foreach (var vehicle in _vehicles)
+            {
+                <tr>
+                    <td>@vehicle.Make.Name</td>
+                    <td>@vehicle.Model.Name</td>
+                    <td>@vehicle.Year</td>
+                    <td>@vehicle.RentalRate</td>
+                    <td>
+                        <a href="/vehicles/show/@vehicle.Id" class="btn btn-primary">
+                            <span class="oi oi-book"></span>
+                        </a>
+                        <a href="/vehicles/edit/@vehicle.Id" class="btn btn-warning">
+                            <span class="oi oi-pencil"></span>
+                        </a>
+                        <button class="btn-danger" @onclick="@(() => Delete(vehicle.Id))">
+                            <span class="oi oi-delete"></span>
+                        </button>
+                    </td>
 
-            </tr>
-        }
+                </tr>
+            }
         </tbody>
     </table>
 }
