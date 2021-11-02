@@ -8,7 +8,6 @@
 @inject IJSRuntime _js
 
 
-
 <h3 class="card-title">Vehicle List</h3>
 <hr />
 <br />
@@ -52,7 +51,7 @@ else
                         <a href="/vehicles/edit/@vehicle.Id" class="btn btn-warning">
                             <span class="oi oi-pencil"></span>
                         </a>
-                        <button class="btn-danger" @onclick="@(() => Delete(vehicle.Id))">
+                        <button class="btn btn-danger" @onclick="@(() => Delete(vehicle.Id))">
                             <span class="oi oi-delete"></span>
                         </button>
                     </td>
