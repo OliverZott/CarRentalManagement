@@ -4,32 +4,16 @@
 @inject NavigationManager _navigationManager
 
 
-
 <h3 class="card-title">Create New Make</h3>
 <hr />
 <br />
 
-<EditForm Model="@make" OnValidSubmit="CreateNewMake">
-    <DataAnnotationsValidator></DataAnnotationsValidator>
-    <ValidationSummary></ValidationSummary>
-    
-    <div class="form-group">
-        <label>Make Name: </label>
-        <div>
-            <InputText @bind-Value="@make.Name" class="form-control"></InputText>
-            <ValidationMessage For="@(() => make.Name)"></ValidationMessage>
-        </div>
-    </div>
-    
-    <button type="submit" class="btn btn-success btn-block" >Create Make</button>
-
-</EditForm>
-
+<FormComponent ButtonText="Create" OnValidSubmit="@CreateNewMake" Make="_make"></FormComponent>
 
 
 @code {
 
-    private Make make = new Make();
+    private readonly Make _make = new Make();
 
     protected async override Task OnInitializedAsync()
     {
@@ -37,7 +21,7 @@
 
     private async Task CreateNewMake()
     {
-        await _httpClient.PostAsJsonAsync(Endpoints.MakesEndpoint, make);
+        await _httpClient.PostAsJsonAsync(Endpoints.MakesEndpoint, _make);
         _navigationManager.NavigateTo("/makes");
     }
 
