@@ -4,36 +4,20 @@
 @inject NavigationManager _navigationManager
 
 
-
 <h3 class="card-title">Create New Model</h3>
-<hr/>
-<br/>
+<hr />
+<br />
 
-<EditForm Model="@model" OnValidSubmit="CreateNewModel">
-    <DataAnnotationsValidator></DataAnnotationsValidator>
-    <ValidationSummary></ValidationSummary>
-
-    <div class="form-group">
-        <label>Model Name: </label>
-        <div>
-            <InputText @bind-Value="@model.Name" class="form-control"></InputText>
-            <ValidationMessage For="@(() => model.Name)"></ValidationMessage>
-        </div>
-    </div>
-
-    <button class="btn btn-success btn-block">Create Model, type="submit"</button>
-
-</EditForm>
-
+<FormComponent ButtonText="Create Model" Model="_model" OnValidSubmit="@CreateNewModel"></FormComponent>
 
 
 @code {
 
-    private Model model = new Model();
+    private readonly Model _model = new Model();
 
     private async Task CreateNewModel()
     {
-        await _httpClient.PostAsJsonAsync(Endpoints.ModelsEndpoint, model);
+        await _httpClient.PostAsJsonAsync(Endpoints.ModelsEndpoint, _model);
         _navigationManager.NavigateTo("/models");
     }
 

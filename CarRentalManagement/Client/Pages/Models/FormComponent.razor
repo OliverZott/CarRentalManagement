@@ -1,0 +1,27 @@
+﻿
+<EditForm Model="@Model" OnValidSubmit="@OnValidSubmit">
+    <DataAnnotationsValidator></DataAnnotationsValidator>
+    <ValidationSummary></ValidationSummary>
+
+    <div class="form-group">
+        <label>Model Name: </label>
+        <div>
+            <InputText @bind-Value="@Model.Name" class="form-control"></InputText>
+            <ValidationMessage For="@(() => Model.Name)"></ValidationMessage>
+        </div>
+    </div>
+
+    <button type="submit" class="btn btn-success btn-block">
+        @ButtonText
+    </button>
+
+</EditForm>
+
+
+@code {
+
+    [Parameter] public Model Model { get; set; }
+    [Parameter] public string ButtonText { get; set; } = "Save";
+    [Parameter] public EventCallback OnValidSubmit { get; set; }
+
+}

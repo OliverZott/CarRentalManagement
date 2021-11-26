@@ -34,10 +34,10 @@ else
             <tr>
                 <td>@model.Name</td>
                 <td>
-                    <a href="/vehicles/show/@model.Id" class="btn btn-primary">
+                    <a href="/models/show/@model.Id" class="btn btn-primary">
                         <span class="oi oi-book"></span>
                     </a>
-                    <a href="/vehicles/edit/@model.Id" class="btn btn-warning">
+                    <a href="/models/edit/@model.Id" class="btn btn-warning">
                         <span class="oi oi-pencil"></span>
                     </a>
                     <button class="btn btn-danger" @onclick="@(() => Delete(model.Id))">
