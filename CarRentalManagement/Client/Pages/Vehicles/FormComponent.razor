@@ -1,0 +1,116 @@
+﻿@inject HttpClient _httpClient
+
+
+<EditForm Model="@Vehicle" OnValidSubmit="@OnValidSubmit">
+    <DataAnnotationsValidator></DataAnnotationsValidator>
+    <ValidationSummary></ValidationSummary>
+
+
+    <div class="form-group">
+        <label>Make: </label>
+        <div>
+            <select @bind="Vehicle.MakeId" class="form-control">
+                <option value="">-- Select Make --</option>
+                @if (_makes != null)
+                {
+                    foreach (var make in _makes)
+                    {
+                        <option value="@make.Id">@make.Name</option>
+                    }
+                }
+            </select>
+            <ValidationMessage For="@(() => Vehicle.MakeId)"></ValidationMessage>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label>Model: </label>
+        <div>
+            @*same as select, but blazor-component*@
+            <InputSelect @bind-Value="Vehicle.ModelId" class="form-control">
+                <option value="">-- Select Model --</option>
+                @if (_models != null)
+                {
+                    foreach (var model in _models)
+                    {
+                        <option value="@model.Id">@model.Name</option>
+                    }
+                }
+            </InputSelect>
+            <ValidationMessage For="@(() => Vehicle.ModelId)"></ValidationMessage>
+
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label>Color: </label>
+        <div>
+            <select @bind="Vehicle.ColorId" class="form-control">
+                <option value="">-- Select Color --</option>
+                @if (_colors != null)
+                {
+                    foreach (var color in _colors)
+                    {
+                        <option value="@color.Id">@color.Name</option>
+                    }
+                }
+            </select>
+            <ValidationMessage For="@(() => Vehicle.ColorId)"></ValidationMessage>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label>Year: </label>
+        <div>
+            <InputNumber @bind-Value="@Vehicle.Year" class="form-control"></InputNumber>
+            <ValidationMessage For="@(() => Vehicle.Year)"></ValidationMessage>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label>License Plate Number: </label>
+        <div>
+            <InputText @bind-Value="@Vehicle.LicensePlateNumber" class="form-control"></InputText>
+            <ValidationMessage For="@(() => Vehicle.LicensePlateNumber)"></ValidationMessage>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label>Vehicle Identification Number: </label>
+        <div>
+            <InputText @bind-Value="@Vehicle.Vin" class="form-control"></InputText>
+            <ValidationMessage For="@(() => Vehicle.Vin)"></ValidationMessage>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label>Daily Rate: </label>
+        <div>
+            <InputNumber @bind-Value="@Vehicle.RentalRate" class="form-control"></InputNumber>
+            <ValidationMessage For="@(() => Vehicle.RentalRate)"></ValidationMessage>
+        </div>
+    </div>
+
+    <button type="submit" class="btn btn-success btn-block">@ButtonText</button>
+
+</EditForm>
+
+
+@code {
+
+    [Parameter] public Vehicle Vehicle { get; set; }
+    [Parameter] public EventCallback OnValidSubmit { get; set; }
+    [Parameter] public string ButtonText { get; set; }
+
+    private List<Make> _makes;
+    private List<Model> _models;
+    private List<Color> _colors;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _makes = await _httpClient.GetFromJsonAsync<List<Make>>($"{Endpoints.MakesEndpoint}");
+        _models = await _httpClient.GetFromJsonAsync<List<Model>>($"{Endpoints.ModelsEndpoint}");
+        _colors = await _httpClient.GetFromJsonAsync<List<Color>>($"{Endpoints.ColorsEndpoint}");
+    }
+
+}

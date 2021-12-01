@@ -8,7 +8,7 @@
 <hr />
 <br />
 
-<FormComponent ButtonText="Update" OnValidSubmit="@EditMake" Make="_make"></FormComponent>
+<FormComponent ButtonText="Update Make" OnValidSubmit="@EditExistingMake" Make="_make"></FormComponent>
 
 
 @code {
@@ -21,7 +21,7 @@
         _make = await _httpClient.GetFromJsonAsync<Make>($"{Endpoints.MakesEndpoint}/{Id}");
     }
 
-    private async Task EditMake()
+    private async Task EditExistingMake()
     {
         await _httpClient.PutAsJsonAsync($"{Endpoints.MakesEndpoint}/{Id}", _make);
         _navigationManager.NavigateTo("/makes");

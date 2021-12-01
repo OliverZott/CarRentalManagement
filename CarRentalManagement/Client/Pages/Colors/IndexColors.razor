@@ -64,7 +64,7 @@ else
     {
         var color = _colors.Find(x => x.Id == colorId);
 
-        if (!await _js.InvokeAsync<bool>("WTF", $"Do you want to delete {color.Name}?")) return;
+        if (!await _js.InvokeAsync<bool>("confirm", $"Do you want to delete {color.Name}?")) return;
         await _httpClient.DeleteAsync($"{Endpoints.ColorsEndpoint}/{color.Id}");
         await OnInitializedAsync();
     }

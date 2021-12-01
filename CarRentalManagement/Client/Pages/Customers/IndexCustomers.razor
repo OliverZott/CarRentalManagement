@@ -1,8 +1,5 @@
 ﻿@page "/customers/"
-@using Microsoft.AspNetCore.Authorization
-@using Microsoft.AspNetCore.Components.WebAssembly.Authentication
-@using CarRentalManagement.Shared
-@using CarRentalManagement.Client.Static
+
 @attribute [Authorize]
 @inject HttpClient _httpClient
 @inject IJSRuntime _js
@@ -37,26 +34,26 @@ else
             </tr>
         </thead>
         <tbody>
-        @foreach (var customer in _customers)
-        {
-            <tr>
-                <td>@customer.EmailAddress</td>
-                <td>@customer.Address</td>
-                <td>@customer.ContactNumber</td>
-                <td>@customer.TaxId</td>
-                <td>
-                    <a href="/customers/view/@customer.Id" class="btn btn-primary">
-                        <span class="oi oi-book"></span>
-                    </a>
-                    <a href="/customers/edit/@customer.Id" class="btn btn-warning">
-                        <span class="oi oi-pencil"></span>
-                    </a>
-                    <button class="btn btn-danger" @onclick="@(() => Delete(customer.Id))">
-                        <span class="oi oi-delete"></span>
-                    </button>
-                </td>
-            </tr>
-        }
+            @foreach (var customer in _customers)
+            {
+                <tr>
+                    <td>@customer.EmailAddress</td>
+                    <td>@customer.Address</td>
+                    <td>@customer.ContactNumber</td>
+                    <td>@customer.TaxId</td>
+                    <td>
+                        <a href="/customers/view/@customer.Id" class="btn btn-primary">
+                            <span class="oi oi-book"></span>
+                        </a>
+                        <a href="/customers/edit/@customer.Id" class="btn btn-warning">
+                            <span class="oi oi-pencil"></span>
+                        </a>
+                        <button class="btn btn-danger" @onclick="@(() => Delete(customer.Id))">
+                            <span class="oi oi-delete"></span>
+                        </button>
+                    </td>
+                </tr>
+            }
         </tbody>
     </table>
 }

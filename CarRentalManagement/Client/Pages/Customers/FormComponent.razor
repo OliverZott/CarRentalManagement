@@ -1,0 +1,51 @@
+﻿
+<EditForm Model="@Customer" OnValidSubmit="@OnValidSubmit">
+    <DataAnnotationsValidator></DataAnnotationsValidator>
+    <ValidationSummary></ValidationSummary>
+
+
+    <div class="form-group">
+        <label>EMail Address: </label>
+        <div>
+            <InputText @bind-Value="@Customer.EmailAddress" class="form-control"></InputText>
+            <ValidationMessage For="@(() => Customer.EmailAddress)"></ValidationMessage>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label>Contact Number: </label>
+        <div>
+            <InputText @bind-Value="@Customer.ContactNumber" class="form-control"></InputText>
+            <ValidationMessage For="@(() => Customer.ContactNumber)"></ValidationMessage>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label>Address: </label>
+        <div>
+            <InputText @bind-Value="@Customer.Address" class="form-control"></InputText>
+            <ValidationMessage For="@(() => Customer.Address)"></ValidationMessage>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label>Tax Identification Number: </label>
+        <div>
+            <InputNumber @bind-Value="@Customer.TaxId" class="form-control"></InputNumber>
+            <ValidationMessage For="@(() => Customer.TaxId)"></ValidationMessage>
+        </div>
+    </div>
+
+    <button type="submit" class="btn btn-success btn-block">@ButtonText</button>
+
+</EditForm>
+
+@code {
+    [Parameter]
+    public Customer Customer { get; set; }
+    [Parameter]
+    public string ButtonText { get; set; }
+    [Parameter]
+    public EventCallback OnValidSubmit { get; set; }
+
+}
