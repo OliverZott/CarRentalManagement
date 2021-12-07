@@ -1,0 +1,35 @@
+﻿@page "/bookings/edit/{id:int}"
+
+@inject HttpClient _httpClient
+@inject NavigationManager _navigationManager
+
+
+<h3 class="card-title">Edit Booking</h3>
+<hr />
+<br />
+
+<FormComponent Booking="_booking" ButtonText="Create Booking" OnValidSubmit="@UpdateBooking"></FormComponent>
+
+
+@code {
+
+    [Parameter] public int Id { get; set; }
+
+    private Booking _booking = new Booking
+        {
+            DateOut = DateTime.Now.Date
+        };
+
+    protected override async Task OnParametersSetAsync()
+    {
+        _booking = await _httpClient.GetFromJsonAsync<Booking>($"{Endpoints.BookingsEndpoint}/{Id}");
+    }
+
+    //Values for object come from the "bind" in FormComponent.razor
+    private async Task UpdateBooking()
+    {
+        await _httpClient.PutAsJsonAsync($"{Endpoints.BookingsEndpoint}/{Id}", _booking);
+        _navigationManager.NavigateTo("/bookings");
+    }
+
+}

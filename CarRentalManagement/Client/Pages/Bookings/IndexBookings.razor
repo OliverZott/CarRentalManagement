@@ -32,7 +32,7 @@ else
             <tr>
                 <th>Customer Tax Id</th>
                 <th>Vehicle</th>
-                <th>Date Out</th>
+                <th>Date</th>
                 <th>Duration</th>
                 <th>Actions</th>
             </tr>
@@ -41,15 +41,15 @@ else
         @foreach (var booking in _bookings)
         {
             <tr>
-                <td>@booking.Customer.TaxId</td>
-                <td>@booking.Vehicle.Make/@booking.Vehicle.Model</td>
+                <td>@booking.Customer.EmailAddress</td>
+                <td>@booking.Vehicle.Make.Name</td>
                 <td>@booking.DateCreated.Date.ToString("dd MMMM yyyy")</td>
                 <td>@((booking.DateIn - booking.DateOut).TotalDays.ToString(CultureInfo.InvariantCulture))</td>
                 <td>
-                    <a href="/makes/view/@booking.Id" class="btn btn-primary">
+                    <a href="/bookings/view/@booking.Id" class="btn btn-primary">
                         <span class="oi oi-book"></span>
                     </a>
-                    <a href="/makes/edit/@booking.Id" class="btn btn-warning">
+                    <a href="/bookings/edit/@booking.Id" class="btn btn-warning">
                         <span class="oi oi-pencil"></span>
                     </a>
                     <button class="btn btn-danger" @onclick="@(() => Delete(booking.Id))">

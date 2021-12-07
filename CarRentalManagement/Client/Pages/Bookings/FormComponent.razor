@@ -1,0 +1,73 @@
+﻿@inject HttpClient _httpClient;
+
+<EditForm Model="@Booking" OnValidSubmit="@OnValidSubmit">
+    <DataAnnotationsValidator></DataAnnotationsValidator>
+    <ValidationSummary></ValidationSummary>
+
+    <div class="form-group">
+        <label>Vehicle:</label>
+        <div>
+            <InputSelect @bind-Value="Booking.VehicleId" class="form-control">
+                <option value="">-- Select Vehicle --</option>
+                @if (_vehicles != null)
+                {
+                    foreach (var vehicle in _vehicles)
+                    {
+                        <option value="@vehicle.Id">@vehicle.Make.Name - @vehicle.Model.Name</option>
+                    }
+                }
+            </InputSelect>
+            <ValidationMessage For="@(() => Booking.VehicleId)"></ValidationMessage>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label>Vehicle:</label>
+        <div>
+            <InputSelect @bind-Value="Booking.CustomerId" class="form-control">
+                <option value="">-- Select Customer --</option>
+                @if (_customers != null)
+                {
+                    foreach (var customer in _customers)
+                    {
+                        <option value="@customer.Id">@customer.EmailAddress</option>
+                    }
+                }
+            </InputSelect>
+            <ValidationMessage For="@(() => Booking.CustomerId)"></ValidationMessage>
+        </div>
+    </div>
+
+    <div>
+        <label>Date Out:</label>
+        <div>
+            <InputDate @bind-Value="Booking.DateOut" class="form-control">
+                <option value="@DateTime.Now.ToString("yyyy MMMM dd")"></option>
+            </InputDate>
+            <ValidationMessage For="@(() => Booking.DateOut)"></ValidationMessage>
+        </div>
+    </div>
+    <br />
+
+    <button type="submit" class="btn btn-success btn-block">@ButtonText</button>
+    <BackToList Target="bookings" />
+</EditForm>
+
+
+@code {
+
+    [Parameter] public Booking Booking { get; set; }
+    [Parameter] public string ButtonText { get; set; }
+    [Parameter] public EventCallback OnValidSubmit { get; set; }
+
+    private IList<Vehicle> _vehicles;
+    private IList<Customer> _customers;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _vehicles = await _httpClient.GetFromJsonAsync<List<Vehicle>>(Endpoints.VehiclesEndpoint);
+        _customers = await _httpClient.GetFromJsonAsync<List<Customer>>(Endpoints.CustomersEndpoint);
+    }
+
+
+}
