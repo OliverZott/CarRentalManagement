@@ -42,9 +42,10 @@ else
         {
             <tr>
                 <td>@booking.Customer.EmailAddress</td>
-                <td>@booking.Vehicle.Make.Name</td>
+                <td>@booking.Vehicle.Make</td>
                 <td>@booking.DateCreated.Date.ToString("dd MMMM yyyy")</td>
-                <td>@((booking.DateIn - booking.DateOut).TotalDays.ToString(CultureInfo.InvariantCulture))</td>
+                <td>@(booking.DateIn != null ? (booking.DateIn.Value - booking.DateOut).TotalDays.ToString(CultureInfo.InvariantCulture) : "To be determined.")</td>
+                @*<td>@(booking.DateIn - booking.DateOut).TotalDays.ToString(CultureInfo.InvariantCulture))</td>*@
                 <td>
                     <a href="/bookings/view/@booking.Id" class="btn btn-primary">
                         <span class="oi oi-book"></span>

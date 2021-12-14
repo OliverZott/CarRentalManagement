@@ -47,6 +47,15 @@
             <ValidationMessage For="@(() => Booking.DateOut)"></ValidationMessage>
         </div>
     </div>
+    <div>
+        <label>Date In:</label>
+        <div>
+            <InputDate @bind-Value="Booking.DateIn" class="form-control">
+                <option value="@DateTime.Now.ToString("yyyy MMMM dd")"></option>
+            </InputDate>
+            <ValidationMessage For="@(() => Booking.DateIn)"></ValidationMessage>
+        </div>
+    </div>
     <br />
 
     <button type="submit" class="btn btn-success btn-block">@ButtonText</button>
