@@ -3,7 +3,21 @@
     <DataAnnotationsValidator></DataAnnotationsValidator>
     <ValidationSummary></ValidationSummary>
 
-
+    
+    <div class="form-group">
+        <label>First Name: </label>
+        <div>
+            <InputText @bind-Value="@Customer.FirstName" class="form-control"></InputText>
+            <ValidationMessage For="@(() => Customer.FirstName)"></ValidationMessage>
+        </div>
+    </div>
+    <div class="form-group">
+        <label>Last Name: </label>
+        <div>
+            <InputText @bind-Value="@Customer.LastName" class="form-control"></InputText>
+            <ValidationMessage For="@(() => Customer.LastName)"></ValidationMessage>
+        </div>
+    </div>
     <div class="form-group">
         <label>EMail Address: </label>
         <div>
