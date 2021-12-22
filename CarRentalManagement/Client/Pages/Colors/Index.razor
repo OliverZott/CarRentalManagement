@@ -1,8 +1,5 @@
 ﻿@page "/colors/"
-@inject HttpClient _httpClient
-@inject IJSRuntime _js
-
-
+@*@attribute [Authorize]*@
 
 <HeadingComponent Text="Colors"></HeadingComponent>
 <br />
@@ -52,20 +49,5 @@ else
 
 
 @code {
-    private List<Color> _colors;
-
-    protected override async Task OnInitializedAsync()
-    {
-        _colors = await _httpClient.GetFromJsonAsync<List<Color>>(Endpoints.ColorsEndpoint);
-    }
-
-    private async void Delete(int colorId)
-    {
-        var color = _colors.Find(x => x.Id == colorId);
-
-        if (!await _js.InvokeAsync<bool>("confirm", $"Do you want to delete {color.Name}?")) return;
-        await _httpClient.DeleteAsync($"{Endpoints.ColorsEndpoint}/{color.Id}");
-        await OnInitializedAsync();
-    }
-
+   
 }

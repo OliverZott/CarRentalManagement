@@ -1,6 +1,5 @@
 ﻿@page "/models/"
-@inject HttpClient _httpClient
-@inject IJSRuntime _js
+
 
 
 <HeadingComponent Text="Models"></HeadingComponent>
@@ -51,20 +50,5 @@ else
 
 
 @code {
-    private List<Model> _models;
-
-    protected override async Task OnInitializedAsync()
-    {
-        _models = await _httpClient.GetFromJsonAsync<List<Model>>(Endpoints.ModelsEndpoint);
-    }
-
-    private async void  Delete(int modelId)
-    {
-        var model = _models.Find(x => x.Id == modelId);
-
-        if (!await _js.InvokeAsync<bool>("confirm", $"Do you want to delete {model.Name}")) return;
-        await _httpClient.DeleteAsync($"{Endpoints.ModelsEndpoint}/{model.Id}" );
-        await OnInitializedAsync();
-    }
 
 }

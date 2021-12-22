@@ -1,12 +1,6 @@
 ﻿@page "/bookings/"
-@using Microsoft.AspNetCore.Authorization
-@using Microsoft.AspNetCore.Components.WebAssembly.Authentication
-@using CarRentalManagement.Shared
-@using CarRentalManagement.Client.Static
 @using System.Globalization
 @attribute [Authorize]
-@inject HttpClient _httpClient
-@inject IJSRuntime _js
 
 
 <HeadingComponent Text="Bookings"></HeadingComponent>
@@ -65,19 +59,5 @@ else
 
 
 @code {
-    private List<Booking> _bookings;
 
-    protected override async Task OnInitializedAsync()
-    {
-        _bookings = await _httpClient.GetFromJsonAsync<List<Booking>>(Endpoints.BookingsEndpoint);
-    }
-
-    async void Delete(int makeId)
-    {
-        var booking = _bookings.First(q => q.Id == makeId);
-
-        if (!await _js.InvokeAsync<bool>("confirm", $"Do you want to delete booking with Id: {booking.Id}")) return;
-        await _httpClient.DeleteAsync($"{Endpoints.BookingsEndpoint}/{makeId}");
-        await OnInitializedAsync();
-    }
 }

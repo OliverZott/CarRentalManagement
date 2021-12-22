@@ -1,8 +1,6 @@
 ﻿@page "/vehicles/"
 
 @attribute [Authorize]
-@inject HttpClient _httpClient
-@inject IJSRuntime _js
 
 
 <HeadingComponent Text="Vehicles"></HeadingComponent>
@@ -61,20 +59,6 @@ else
 
 
 @code {
-    private List<Vehicle> _vehicles;
 
-    protected override async Task OnInitializedAsync()
-    {
-        _vehicles = await _httpClient.GetFromJsonAsync<List<Vehicle>>(Endpoints.VehiclesEndpoint);
-    }
-
-    private async void Delete(int vehicleId)
-    {
-        var vehicle = _vehicles.First(v => v.Id == vehicleId);
-
-        if (!await _js.InvokeAsync<bool>("confirm", $"Do you want to delete vehicle with Id: {vehicle.Id}?")) return;
-        await _httpClient.DeleteAsync($"api/makes/{vehicleId}");
-        await OnInitializedAsync();
-    }
 
 }

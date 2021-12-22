@@ -1,8 +1,6 @@
 ﻿@page "/customers/"
-
 @attribute [Authorize]
-@inject HttpClient _httpClient
-@inject IJSRuntime _js
+
 
 
 <HeadingComponent Text="Customers"></HeadingComponent>
@@ -60,19 +58,5 @@ else
 
 
 @code {
-    private List<Customer> _customers;
 
-    protected override async Task OnInitializedAsync()
-    {
-        _customers = await _httpClient.GetFromJsonAsync<List<Customer>>(Endpoints.CustomersEndpoint);
-    }
-
-    async void Delete(int customerId)
-    {
-        var customer = _customers.First(q => q.Id == customerId);
-
-        if (!await _js.InvokeAsync<bool>("confirm", $"Do you want to delete {customer.EmailAddress}")) return;
-        await _httpClient.DeleteAsync($"{Endpoints.CustomersEndpoint}/{customerId}");
-        await OnInitializedAsync();
-    }
 }
