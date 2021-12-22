@@ -1,15 +1,10 @@
 ﻿@page "/makes/"
-@using Microsoft.AspNetCore.Authorization
-@using Microsoft.AspNetCore.Components.WebAssembly.Authentication
-@using CarRentalManagement.Shared
-@using CarRentalManagement.Client.Static
-@attribute [Authorize]      
+@attribute [Authorize]
 @inject HttpClient _httpClient
 @inject IJSRuntime _js
 
 
-<h3 class="card-title">Car Makes</h3>
-<hr />
+<HeadingComponent Text="Makes"></HeadingComponent>
 <br />
 
 <a href="/makes/create" class="btn btn-secondary">

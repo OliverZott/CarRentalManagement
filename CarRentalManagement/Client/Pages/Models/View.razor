@@ -1,0 +1,22 @@
+﻿@page "/models/view/{id:int}"
+
+@inject HttpClient _httpClient
+@inject NavigationManager _navigationManager
+
+<HeadingComponent Text="Model"></HeadingComponent>
+<br />
+
+<FormComponent Model="_model" Disabled="true"></FormComponent>
+
+@code {
+
+    [Parameter] public int Id { get; set; }
+    Model _model = new();
+
+    protected override async Task OnParametersSetAsync()
+    {
+        _model = await _httpClient.GetFromJsonAsync<Model>($"{Endpoints.ModelsEndpoint}/{Id}");
+    }
+
+}
+

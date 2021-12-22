@@ -3,8 +3,7 @@
 @inject IJSRuntime _js
 
 
-<h3 class="card-title">Model List</h3>
-<hr />
+<HeadingComponent Text="Models"></HeadingComponent>
 <br />
 
 <a href="/models/create" class="btn btn-secondary">
@@ -34,7 +33,7 @@ else
             <tr>
                 <td>@model.Name</td>
                 <td>
-                    <a href="/models/show/@model.Id" class="btn btn-primary">
+                    <a href="/models/view/@model.Id" class="btn btn-primary">
                         <span class="oi oi-book"></span>
                     </a>
                     <a href="/models/edit/@model.Id" class="btn btn-warning">

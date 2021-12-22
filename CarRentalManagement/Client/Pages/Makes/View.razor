@@ -1,0 +1,23 @@
+﻿@page "/makes/view/{id:int}"
+
+@inject HttpClient _httpClient
+@inject NavigationManager _navigationManager
+
+<HeadingComponent Text="Make"></HeadingComponent>
+<br />
+
+<FormComponent Make="_make" Disabled="true"></FormComponent>
+
+@code {
+
+    [Parameter] public int Id { get; set; }
+    Make _make = new();
+
+    protected override async Task OnParametersSetAsync()
+    {
+        _make = await _httpClient.GetFromJsonAsync<Make>($"{Endpoints.MakesEndpoint}/{Id}");
+    }
+
+
+}
+

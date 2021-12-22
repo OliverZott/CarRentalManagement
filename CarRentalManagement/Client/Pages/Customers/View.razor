@@ -1,0 +1,24 @@
+﻿@page "/customers/view/{id:int}"
+
+@inject HttpClient _httpClient
+@inject NavigationManager _navigationManager
+
+<HeadingComponent Text="Customer"></HeadingComponent>
+<br />
+
+
+<FormComponent Customer="_customer" Disabled="true"></FormComponent>
+
+@code {
+
+    [Parameter] public int Id { get; set; }
+    Customer _customer = new();
+
+    protected override async Task OnParametersSetAsync()
+    {
+        _customer = await _httpClient.GetFromJsonAsync<Customer>($"{Endpoints.CustomersEndpoint}/{Id}");
+    }
+
+
+}
+

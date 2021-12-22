@@ -1,0 +1,24 @@
+﻿@page "/bookings/view/{id:int}"
+
+@inject HttpClient _httpClient
+@inject NavigationManager _navigationManager
+
+<HeadingComponent Text="Booking"></HeadingComponent>
+<br />
+
+
+<FormComponent Booking="_booking" Disabled="true"></FormComponent>
+
+@code {
+
+    [Parameter] public int Id { get; set; }
+    Booking _booking = new();
+
+    protected override async Task OnParametersSetAsync()
+    {
+        _booking = await _httpClient.GetFromJsonAsync<Booking>($"{Endpoints.BookingsEndpoint}/{Id}");
+    }
+
+
+}
+

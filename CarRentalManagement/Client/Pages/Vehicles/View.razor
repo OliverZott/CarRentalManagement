@@ -1,0 +1,22 @@
+﻿@page "/vehicles/view/{id:int}"
+
+@inject HttpClient _httpClient
+@inject NavigationManager _navigationManager
+
+<HeadingComponent Text="Vehicle"></HeadingComponent>
+<br />
+
+<FormComponent Vehicle="_vehicle" Disabled="true"></FormComponent>
+
+@code {
+
+    [Parameter] public int Id { get; set; }
+    Vehicle _vehicle = new();
+
+    protected override async Task OnParametersSetAsync()
+    {
+        _vehicle = await _httpClient.GetFromJsonAsync<Vehicle>($"{Endpoints.VehiclesEndpoint}/{Id}");
+    }
+
+}
+

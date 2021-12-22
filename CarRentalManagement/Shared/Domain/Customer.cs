@@ -14,7 +14,7 @@ namespace CarRentalManagement.Shared.Domain
         public string LastName { get; set; }
 
         [Required]
-        [StringLength(12, MinimumLength = 8, ErrorMessage = "TaxId does not meet length requirement!")]
+        //[StringLength(12, MinimumLength = 8, ErrorMessage = "TaxId does not meet length requirement!")]
         public int TaxId { get; set; }
 
         public string Address { get; set; }

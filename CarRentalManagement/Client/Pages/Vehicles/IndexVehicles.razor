@@ -5,8 +5,7 @@
 @inject IJSRuntime _js
 
 
-<h3 class="card-title">Vehicle List</h3>
-<hr />
+<HeadingComponent Text="Vehicles"></HeadingComponent>
 <br />
 
 <a href="/vehicles/create" class="btn btn-secondary">
@@ -42,7 +41,7 @@ else
                     <td>@vehicle.Year</td>
                     <td>@vehicle.RentalRate</td>
                     <td>
-                        <a href="/vehicles/show/@vehicle.Id" class="btn btn-primary">
+                        <a href="/vehicles/view/@vehicle.Id" class="btn btn-primary">
                             <span class="oi oi-book"></span>
                         </a>
                         <a href="/vehicles/edit/@vehicle.Id" class="btn btn-warning">
