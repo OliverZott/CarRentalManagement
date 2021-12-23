@@ -7,18 +7,21 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
+using CarRentalManagement.Client.Services;
 
 namespace CarRentalManagement.Client.Pages.Colors
 {
-    public partial class Index
+    public partial class Index : IDisposable
     {
         [Inject] private HttpClient _httpClient { get; set; }
         [Inject] private IJSRuntime _js { get; set; }
+        [Inject] HttpInterceptorService _httpInterceptorService { get; set; }
 
         private List<Color> _colors;
 
         protected override async Task OnInitializedAsync()
         {
+            _httpInterceptorService.MonitorEvent();
             Console.WriteLine("Hitting Code Behind Form =)");
             _colors = await _httpClient.GetFromJsonAsync<List<Color>>(Endpoints.ColorsEndpoint);
         }
@@ -32,6 +35,10 @@ namespace CarRentalManagement.Client.Pages.Colors
             await OnInitializedAsync();
         }
 
+        public void Dispose()
+        {
+            _httpInterceptorService.DisposeEvent();
+        }
     }
 }
 
