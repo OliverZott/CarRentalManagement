@@ -1,7 +1,8 @@
 ﻿@page "/bookings/"
 @using System.Globalization
+@inject IJSRuntime js
+@implements IDisposable
 @attribute [Authorize]
-
 
 <HeadingComponent Text="Bookings"></HeadingComponent>
 <br />
@@ -20,7 +21,7 @@
 }
 else
 {
-    <table class="table table-responsive">
+    <table class="table table-responsive" id="bookingsTable">
         <thead>
             <tr>
                 <th>Customer Tax Id</th>
@@ -59,5 +60,14 @@ else
 
 
 @code {
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        await js.InvokeVoidAsync("AddDataTable", "#bookingsTable");
+    }
+
+    public void Dispose()
+    {
+        js.InvokeVoidAsync("DataTablesDispose", "#bookingsTable");
+    }
 
 }
