@@ -21,7 +21,7 @@ namespace CarRentalManagement.Client
                     client.BaseAddress = new Uri(builder.HostEnvironment.BaseAddress);
                     client.EnableIntercept(sp);
                 })
-                .AddHttpMessageHandler<BaseAddressAuthorizationMessageHandler>();  // Authorization is ALWAYS needed!
+                .AddHttpMessageHandler<BaseAddressAuthorizationMessageHandler>();  // Authorization is ALWAYS needed! On Login Token is generated and saved as cookie, so api request works!
 
             // Supply HttpClient instances that include access tokens when making requests to the server project
             builder.Services.AddScoped(sp => sp.GetRequiredService<IHttpClientFactory>().CreateClient("CarRentalManagement.ServerAPI"));
