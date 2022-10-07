@@ -21,7 +21,9 @@ namespace CarRentalManagement.Server.Controllers
         [HttpGet]
         public async Task<IActionResult> GetColors()
         {
-            return NotFound();
+            // TODO: Example for Error page
+            //return NotFound();
+
             var color = await _unitOfWork.Color.GetAll();
             return Ok(color);
         }
