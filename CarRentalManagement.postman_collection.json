@@ -1,0 +1,170 @@
+{
+	"info": {
+		"_postman_id": "01b3bd1e-bbc0-433e-81d9-fc66c505ee48",
+		"name": "CarRentalManagement",
+		"description": "# Blazor Example\n\n## Resources\n\n- Repo: [https://github.com/OliverZott/CarRentalManagement](https://github.com/OliverZott/CarRentalManagement)\n- Course: [https://www.udemy.com/course/modern-web-development-with-blazor-and-net-core-5/](https://www.udemy.com/course/modern-web-development-with-blazor-and-net-core-5/)\n    \n\n## Start App\n\n- Clone repo  \n- Startup Project  \n  - CarRentalManagement.Server  \n  - IIS Express  \n- Create IIS Database: `Update Database`  \n- Dummy Test-User:  \n  - admin@localhost.com\n  - P@ssword1\n- Example for Error page in `ColorsController`",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "12222368"
+	},
+	"item": [
+		{
+			"name": "Colors",
+			"item": [
+				{
+					"name": "Get all Colors",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/colors",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"colors"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Makes",
+			"item": [
+				{
+					"name": "Get all Makes",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/makes",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"makes"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Models",
+			"item": [
+				{
+					"name": "Get all Models",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/models",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"models"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Vehicles",
+			"item": [
+				{
+					"name": "Get all Vehicles",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/vehicles",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"vehicles"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Bookings",
+			"item": [
+				{
+					"name": "Get all Bookings",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/bookings",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"bookings"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Customers",
+			"item": [
+				{
+					"name": "Get all Customers",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/customers",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"customers"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "url",
+			"value": "https://localhost:44369/api",
+			"type": "string"
+		}
+	]
+}
