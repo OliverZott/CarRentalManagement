@@ -1,22 +1,21 @@
 ﻿@page "/vehicles/view/{id:int}"
+@using CarRentalManagement.Client.Contracts
 
-@inject HttpClient _httpClient
-@inject NavigationManager _navigationManager
+@inject IHttpRepository<Vehicle> HttpRepository
 
 <HeadingComponent Text="Vehicle"></HeadingComponent>
 <br />
 
 <FormComponent Vehicle="_vehicle" Disabled="true"></FormComponent>
 
+
 @code {
 
-    [Parameter] public int Id { get; set; }
+	[Parameter] public int Id { get; set; }
     Vehicle _vehicle = new();
 
     protected override async Task OnParametersSetAsync()
     {
-        _vehicle = await _httpClient.GetFromJsonAsync<Vehicle>($"{Endpoints.VehiclesEndpoint}/{Id}");
+        _vehicle = await HttpRepository.GetDetails(Endpoints.VehiclesEndpoint, Id);
     }
-
 }
-

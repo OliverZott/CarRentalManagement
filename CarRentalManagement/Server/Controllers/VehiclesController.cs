@@ -35,9 +35,11 @@ namespace CarRentalManagement.Server.Controllers
             return Ok(vehicle);
         }
 
-        // GET: api/Vehicle/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Vehicle>> GetVehicle(int id)
+
+        // GET: api/Vehicle/5/details
+        [HttpGet("{id}/details")]
+
+        public async Task<ActionResult<Vehicle>> GetVehicleDetails(int id)
         {
             var vehicle = await _unitOfWork.Vehicle.Get(
                 x => x.Id == id,
@@ -46,6 +48,20 @@ namespace CarRentalManagement.Server.Controllers
                     .Include(x => x.Model)
                     .Include(x => x.Color)
                     .Include(x => x.RentalRecords));
+
+            if (vehicle == null)
+            {
+                return NotFound();
+            }
+
+            return vehicle;
+        }
+
+        // GET: api/Vehicle/5
+        [HttpGet("{id}")]
+        public async Task<ActionResult<Vehicle>> GetVehicle(int id)
+        {
+            var vehicle = await _unitOfWork.Vehicle.Get(q => q.Id == id);
 
             if (vehicle == null)
             {

@@ -25,6 +25,12 @@ public class HttpRepository<T> : IDisposable, IHttpRepository<T> where T : class
 		return await _httpClient.GetFromJsonAsync<T>($"{url}/{id}");
 	}
 
+	public async Task<T> GetDetails(string url, int id)
+	{
+		_httpInterceptorService.MonitorEvent();
+		return await _httpClient.GetFromJsonAsync<T>($"{url}/{id}/details");
+	}
+
 	public async Task<IList<T>> GetAll(string url)
 	{
 		_httpInterceptorService.MonitorEvent();
