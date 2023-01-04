@@ -1,5 +1,7 @@
 ﻿using CarRentalManagement.Server.Repository;
 using CarRentalManagement.Shared.Domain;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
@@ -12,10 +14,14 @@ namespace CarRentalManagement.Server.Controllers
     public class VehiclesController : ControllerBase
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IWebHostEnvironment _webHostEnvironment;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public VehiclesController(IUnitOfWork unitOfWork)
+        public VehiclesController(IUnitOfWork unitOfWork, IWebHostEnvironment webHostEnvironment, IHttpContextAccessor httpContextAccessor)
         {
             _unitOfWork = unitOfWork;
+            _webHostEnvironment = webHostEnvironment;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         // GET: api/Vehicle
@@ -52,6 +58,12 @@ namespace CarRentalManagement.Server.Controllers
                 return BadRequest();
             }
 
+            // Create image 
+            if (vehicle.Image != null)
+            {
+                vehicle.ImageName = CreateImage(vehicle.Image, vehicle.ImageName);
+            }
+
             _unitOfWork.Vehicle.Update(vehicle);
 
             try
@@ -78,6 +90,12 @@ namespace CarRentalManagement.Server.Controllers
         [HttpPost]
         public async Task<ActionResult<Vehicle>> PostVehicle(Vehicle vehicle)
         {
+            // Create image 
+            if (vehicle.Image != null)
+            {
+                vehicle.ImageName = CreateImage(vehicle.Image, vehicle.ImageName);
+            }
+
             await _unitOfWork.Vehicle.Insert(vehicle);
             await _unitOfWork.Save(this.HttpContext);
 
@@ -105,5 +123,16 @@ namespace CarRentalManagement.Server.Controllers
 
             return vehicle != null;
         }
+
+        private string CreateImage(byte[] image, string imageName)
+        {
+            var url = _httpContextAccessor.HttpContext!.Request.Host.Value;
+            var path = $"{_webHostEnvironment.WebRootPath}\\uploads\\{imageName}";
+            var fileStream = System.IO.File.Create(path);
+            fileStream.Write(image, 0, image.Length);
+            fileStream.Close();
+            return $"https://{url}/uploads/{imageName}";
+        }
+
     }
 }
