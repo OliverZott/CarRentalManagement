@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace CarRentalManagement.Server.Controllers
@@ -28,8 +27,11 @@ namespace CarRentalManagement.Server.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            var includes = new List<string> { "Make", "Model", "Color" };
-            var vehicle = await _unitOfWork.Vehicle.GetAll(includes: includes);
+            var vehicle = await _unitOfWork.Vehicle.GetAll(
+                includes: q => q
+                .Include(x => x.Make)
+                .Include(x => x.Model)
+                .Include(x => x.Color));
             return Ok(vehicle);
         }
 
@@ -37,8 +39,13 @@ namespace CarRentalManagement.Server.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Vehicle>> GetVehicle(int id)
         {
-            var includes = new List<string> { "Make", "Model", "Color", "RentalRecords" };
-            var vehicle = await _unitOfWork.Vehicle.Get(x => x.Id == id, includes);
+            var vehicle = await _unitOfWork.Vehicle.Get(
+                x => x.Id == id,
+                includes: q => q
+                    .Include(x => x.Make)
+                    .Include(x => x.Model)
+                    .Include(x => x.Color)
+                    .Include(x => x.RentalRecords));
 
             if (vehicle == null)
             {

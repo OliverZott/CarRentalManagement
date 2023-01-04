@@ -1,5 +1,6 @@
 ﻿using CarRentalManagement.Server.Data;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,7 +25,7 @@ namespace CarRentalManagement.Server.Repository
         public async Task<IList<T>> GetAll(
             Expression<Func<T, bool>> expression = null,
             Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null,
-            List<string> includes = null)
+            Func<IQueryable<T>, IIncludableQueryable<T, object>> includes = null)
         {
             IQueryable<T> query = _db;
 
@@ -32,7 +33,7 @@ namespace CarRentalManagement.Server.Repository
 
             if (includes != null)
             {
-                query = includes.Aggregate(query, (current, include) => current.Include(include));
+                query = includes(query);
             };
 
             if (orderBy != null) query = orderBy(query);
@@ -42,16 +43,13 @@ namespace CarRentalManagement.Server.Repository
 
         public async Task<T> Get(
             Expression<Func<T, bool>> expression,
-            List<string> includes = null)
+            Func<IQueryable<T>, IIncludableQueryable<T, object>> includes = null)
         {
             IQueryable<T> query = _db;  // Initialize query of type db.
 
             if (includes != null)
             {
-                foreach (var include in includes)
-                {
-                    query = query.Include(include);
-                }
+                query = includes(query);
             }
 
             return await query.AsNoTracking().FirstOrDefaultAsync(expression);
