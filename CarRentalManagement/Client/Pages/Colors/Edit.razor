@@ -1,6 +1,7 @@
 ﻿@page "/colors/edit/{id:int}"
+@using CarRentalManagement.Client.Contracts
 
-@inject HttpClient _httpClient
+@inject IHttpRepository<Color> HttpRepository
 @inject NavigationManager _navigationManager
 
 
@@ -14,17 +15,16 @@
 @code {
 
     [Parameter] public int Id { get; set; }
-    private Color _color = new Color();
+    Color _color = new();
 
     protected override async Task OnParametersSetAsync()
     {
-        _color = await _httpClient.GetFromJsonAsync<Color>($"{Endpoints.ColorsEndpoint}/{Id}");
+        _color = await HttpRepository.Get(Endpoints.ColorsEndpoint, Id);
     }
 
     private async Task EditColor()
     {
-        await _httpClient.PutAsJsonAsync($"{Endpoints.ColorsEndpoint}/{Id}", _color);
+        await HttpRepository.Update(Endpoints.ColorsEndpoint, _color, Id);
         _navigationManager.NavigateTo("/colors");
     }
-
 }

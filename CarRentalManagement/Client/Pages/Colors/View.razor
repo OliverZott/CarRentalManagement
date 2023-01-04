@@ -1,6 +1,7 @@
 ﻿@page "/colors/view/{id:int}"
+@using CarRentalManagement.Client.Contracts
 
-@inject HttpClient _httpClient
+@inject IHttpRepository<Color> HttpRepository
 @inject NavigationManager _navigationManager
 
 <HeadingComponent Text="Color"></HeadingComponent>
@@ -9,6 +10,7 @@
 
 <FormComponent Color="_color" Disabled="true"></FormComponent>
 
+
 @code {
 
     [Parameter] public int Id { get; set; }
@@ -16,9 +18,6 @@
 
     protected override async Task OnParametersSetAsync()
     {
-        _color = await _httpClient.GetFromJsonAsync<Color>($"{Endpoints.ColorsEndpoint}/{Id}");
+        _color = await HttpRepository.Get(Endpoints.ColorsEndpoint, Id);
     }
-
-
 }
-
